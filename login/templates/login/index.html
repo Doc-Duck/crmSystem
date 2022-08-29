@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<script src="{% static 'login/bootstrap.bundle.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'login/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'login/login_main.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+<div style="margin-top: 10%" class="d-flex align-items-center flex-column h-100">
+        {% for msg in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong>{{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <h1 style="text-shadow: 3px 3px 4px grey;" class="text-center">Welcome back</h1>
+        <form class="w-25" method="post">
+            {% csrf_token %}
+            {{ form.login }}
+            {{ form.passwd }}
+            <button class="btn btn-light shadow" type="submit" value="Submit">Submit</button>
+            <a class="btn btn-light" href="{% url 'reg' %}">Registration</a>
+        </form>
+</div>
+</body>
+</html>

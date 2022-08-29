@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="{% static 'login/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'login/login_main.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<div style="margin-top: 10%" class="d-flex align-items-center flex-column h-100">
+        {% for msg in messages %}
+            {{ msg }}
+        {% endfor %}
+        <h1 class="text-center">Registration</h1>
+        <form class="w-25" method="post">
+            {% csrf_token %}
+            {{ form.login }}
+            {{ form.first_name }}
+            {{ form.last_name }}
+            {{ form.passwd }}
+            {{ form.passwd_repeat }}
+            <button style="background-color: #7850a8" class="btn btn-dark" type="submit" value="Submit">Submit</button>
+        </form>
+</div>
+</body>
+</html>

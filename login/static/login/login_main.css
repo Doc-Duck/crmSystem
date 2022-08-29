@@ -1,0 +1,14 @@
+body{
+    background-color: #bababa;
+}
+
+h1{
+    font-size: 7rem;
+    color: #7850a8;
+    font-weight: 500;
+}
+
+body,html {
+    height: 100%;
+    font-family: 'Ubuntu';
+}

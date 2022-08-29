@@ -1,0 +1,45 @@
+<div class="container shadow min-vh-100 py-2">
+    <div class="container network_wrapper col-sm p-2 ">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Network Settings</h5>
+                <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" data-bs-toggle="tab" href="#all">All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#activ">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#complited">Complited</a>
+                    </li>
+                </ul>
+            </div>
+            <form class="card-body tab-content">
+                <div class="tab-pane active" id="all">
+                    <ul>
+                        {% for it in tasks %}
+                            <li>{{ it.title }} {{ it.content }} {{ it.is_completed }}</li>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.is_completed }}
+                                <button type="submit">Bruh</button>
+                            </form>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="tab-pane" id="activ">
+                    {% for it in tasks %}
+                        {% if not it.is_completed %}
+
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane" id="complited">
+                    <p class=" card-text">asdfasdfasdfasfd</p>
+                </div>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

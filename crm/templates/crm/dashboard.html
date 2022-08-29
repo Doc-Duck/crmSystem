@@ -1,0 +1,169 @@
+{% extends 'crm/main.html' %}
+
+{% block body %}
+    <div class="row mt-3">
+        <div class="col-6">
+            <canvas class="chart" id="myChart"></canvas>
+        </div>
+        <div class="col-6">
+            <h1 class="text-center hf mb-3">Sellers of the month</h1>
+            <form method="post">
+                <div class="row mb-3">
+                    {% csrf_token %}
+                    {{ form.order_by }}
+                    <input style="background-color: #CBC3E3;!important;" class="col btn btn-light me-4" type="submit"
+                           value="Submit">
+                </div>
+            </form>
+            <table class="table">
+                <thread>
+                    <th scope="col">Total</th>
+                    <th scope="col">Firstname</th>
+                    <th scope="col">Lastname</th>
+                    <th scope="col">Department</th>
+                </thread>
+                <tbody>
+                {% for managers in spm %}
+                    <tr>
+                        <th>{{ managers.sum }} ₽</th>
+                        <td>{{ managers.manager__first_name }}</td>
+                        <td>{{ managers.manager__last_name }}</td>
+                        <td>{{ managers.manager__department__name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <h1 class="text-center">Last sales</h1>
+            <table class="table">
+                <thread>
+                    <th scope="col">Date</th>
+                    <th scope="col">Manager Lastname</th>
+                    <th scope="col">Client Lastname</th>
+                    <th scope="col">Total</th>
+                </thread>
+                <tbody>
+                {% for sale in sales %}
+                    <tr>
+                        <th>{{ sale.sale_date }}</th>
+                        <td>{{ sale.manager__last_name }}</td>
+                        <td>{{ sale.client__last_name }}</td>
+                        <td>{{ sale.sum }} ₽</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="network_wrapper col p-2 ">
+            <div class="card">
+                <div class="card-header" style="background-color:  #CBC3E3;">
+                    <h5 class="card-title">ToDo list</h5>
+                    <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="true" data-bs-toggle="tab" href="#all">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#activ">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#complited">Complited</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#new_Task">New Task</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body tab-content">
+                    <div class="tab-pane active" id="all">
+                        <ul class="list-group">
+                            {% for it in tasks %}
+                                {% if it.is_completed %}
+                                    <li class="list-group-item d-flex"><p class="me-3"
+                                                                          style="text-decoration: line-through; margin-bottom: 0; font-weight: bold">{{ it.title }}</p>
+                                        <p style="text-decoration: line-through; margin-bottom: 0; font-style: italic">{{ it.content }}</p>
+                                        <a class="ms-auto" style="text-decoration: none;"
+                                           href="{% url 'delete_one' it.id %}"><p
+                                                style="cursor: pointer; margin-bottom: 0">╳</p></a></li>
+                                {% else %}
+                                    <li class="list-group-item"><a class="d-flex"
+                                                                   style="text-decoration: none; color: black"
+                                                                   href="{% url 'complete' it.id %}"><p class="me-3"
+                                                                                                        style="margin-bottom: 0; font-weight: bold">{{ it.title }}</p>
+                                        <p style="margin-bottom: 0; font-style: italic">{{ it.content }}</p></a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <a href="{% url 'delete_all' %}" class="btn btn-danger mt-3">Delete All</a>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="activ">
+                        <ul class="list-group">
+                            {% for it in tasks %}
+                                {% if not it.is_completed %}
+                                    <li class="list-group-item"><a class="d-flex"
+                                                                   style="text-decoration: none; color: black"
+                                                                   href="{% url 'complete' it.id %}"><p class="me-3"
+                                                                                                        style="margin-bottom: 0; font-weight: bold">{{ it.title }}</p>
+                                        <p style="margin-bottom: 0; font-style: italic">{{ it.content }}</p></a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="complited">
+                        <ul class="list-group">
+                            {% for it in tasks %}
+                                {% if it.is_completed %}
+                                    <li class="list-group-item d-flex"><p class="me-3"
+                                                                          style="text-decoration: line-through; margin-bottom: 0; font-weight: bold">{{ it.title }}</p>
+                                        <p style="text-decoration: line-through; margin-bottom: 0; font-style: italic">{{ it.content }}</p>
+                                        <a class="ms-auto" style="text-decoration: none;"
+                                           href="{% url 'delete_one' it.id %}"><p
+                                                style="cursor: pointer; margin-bottom: 0">╳</p></a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="new_Task">
+                        <form method="post">
+                            <div class="row mb-3">
+                                {% csrf_token %}
+                                {{ task_form.title }}
+                                {{ task_form.content }}
+                                <input style="background-color: #CBC3E3;!important;" class="col-2 btn btn-light me-4"
+                                       type="submit" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        const labels = [{% for item in spm %}"{{ item.manager__first_name }}",{% endfor %}];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'My First dataset',
+                backgroundColor: [{% for el in color %}'rgba({{ el.0 }}, {{ el.1 }}, {{ el.2 }}, 0.3)',{% endfor %}],
+                borderColor: 'rgb(255, 99, 132)',
+                data: [{% for item in spm %}{{ item.total }}, {% endfor %}],
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {}
+        };
+    </script>
+    <script>
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
+{% endblock %}

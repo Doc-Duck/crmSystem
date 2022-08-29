@@ -1,0 +1,112 @@
+{% extends 'crm/main.html' %}
+
+{% block body %}
+    <div class="row" style="height: 100%">
+        <div class="col">
+            <div style="height: 50%">
+                <h1 class="text-center">Your sales</h1>
+                <table class="table ms-2">
+                    <thread>
+                        <th scope="col">First_name</th>
+                        <th scope="col">Last_name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Total</th>
+                    </thread>
+                    <tbody>
+                    {% for managers in sales %}
+                        <tr>
+                            <th>{{ managers.manager.first_name }}</th>
+                            <td>{{ managers.manager.last_name }}</td>
+                            <td>{{ managers.sale_date }}</td>
+                            <td>{{ managers.client.last_name }}</td>
+                            <td>{{ managers.sum }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="height: 45%" class="card ms-3 mt-3 me-1">
+                <div class="card-header">
+                    <h2 class="text-center">Add client</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'add_client' %}" method="post">
+                        {% csrf_token %}
+                        {{ c_form }}
+                        <input class="btn btn-light mt-3" style="background-color: #CBC3E3;!important;" type="submit">
+                    </form>
+                    {% for msg in messages %}
+                        {% if msg.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                <strong>Shit!</strong>{{ msg }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                <strong>Well done!</strong>{{ msg }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card ms-3 mt-3 me-1" style="min-height: 45%; max-height: 100%">
+                <div class="card-header">
+                    <h2 class="text-center">Add deal</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'add_deal' %}" method="post">
+                        <div id="target">
+                            {% csrf_token %}
+                            {{ sales_add }}
+                            {{ product_form }}
+                        </div>
+                        <div id="empty-form" style='display: none'>{{ product_form.empty_form }}</div>
+                        <input class="btn btn-light mt-3" style="background-color: #CBC3E3;!important;" type="submit">
+                    </form>
+                    <button id='add-more' class="btn btn-light">Add more</button>
+                    {% for msg in messages %}
+                        {% if msg.tags == 'error' %}
+                            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                <strong>Shit!</strong>{{ msg }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                <strong>Well done!</strong>{{ msg }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const addMoreBtn = document.getElementById('add-more')
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS')
+        addMoreBtn.addEventListener('click', function add_new_form(event) {
+                if (event) {
+                    event.preventDefault()
+                }
+                const currentForms = document.getElementsByClassName('pr-form')
+                let currentFormCount = currentForms.length - 1
+                const target = document.getElementById('target')
+                const form = document.getElementById('empty-form').cloneNode(true)
+                form.setAttribute('style', 'display: true')
+                form.setAttribute('id', `form-${currentFormCount}`)
+                const regex = new RegExp('__prefix__', 'g')
+                form.innerHTML = form.innerHTML.replace(regex, currentFormCount)
+                totalForms.setAttribute('value', currentFormCount + 1)
+                target.append(form)
+            }
+        )
+    </script>
+{% endblock %}
