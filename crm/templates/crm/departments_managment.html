@@ -1,0 +1,31 @@
+{% extends 'crm/main.html' %}
+
+{% block body %}
+    <div class="row mt-3">
+        <div class="col">
+            <table class="table ms-2">
+                    <thread>
+                        <th scope="col">Department</th>
+                        <th scope="col">Location</th>
+                        <th scope="col" class="text-center">Number of managers</th>
+                    </thread>
+                    <tbody>
+                    {% for department in all_dep %}
+                        <tr>
+                            <th>{{ department.department__name }}</th>
+                            <td>{{ department.department__location }}</td>
+                            <td class="text-center">{{ department.managers }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    <div class="col">
+        <form method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input class="btn btn-light mt-3" style="background-color: #CBC3E3;!important;" type="submit">
+                    </form>
+    </div>
+    </div>
+{% endblock %}
