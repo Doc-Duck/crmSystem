@@ -20,5 +20,5 @@ from login.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls'), name='login'),
-    path('crm/', include('crm.urls'))
+    path('crm/', include('crm.urls')),
 ]

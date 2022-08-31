@@ -35,7 +35,7 @@
             </table>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-5" style="height: 40%">
         <div class="col">
             <h1 class="text-center">Last sales</h1>
             <table class="table">
@@ -58,7 +58,7 @@
             </table>
         </div>
         <div class="network_wrapper col p-2 ">
-            <div class="card">
+            <div class="card" style="height: 100%">
                 <div class="card-header" style="background-color:  #CBC3E3;">
                     <h5 class="card-title">ToDo list</h5>
                     <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
@@ -72,13 +72,13 @@
                             <a class="nav-link" data-bs-toggle="tab" href="#complited">Complited</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#new_Task">New Task</a>
+                            <a class="nav-link" style="background-color: #77dd77" data-bs-toggle="tab" href="#new_Task">New Task</a>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body tab-content">
-                    <div class="tab-pane active" id="all">
-                        <ul class="list-group">
+                    <div style="height: 100%" class="tab-pane active" id="all">
+                        <ul class="list-group" style="height: 100%">
                             {% for it in tasks %}
                                 {% if it.is_completed %}
                                     <li class="list-group-item d-flex"><p class="me-3"
@@ -95,7 +95,9 @@
                                         <p style="margin-bottom: 0; font-style: italic">{{ it.content }}</p></a></li>
                                 {% endif %}
                             {% endfor %}
-                            <a href="{% url 'delete_all' %}" class="btn btn-danger mt-3">Delete All</a>
+                        <div class="d-flex mt-auto justify-content-center">
+                            <a style="width: 50%" href="{% url 'delete_all' %}" class="btn btn-danger mt-auto me-3 mb-3">Delete Completed</a>
+                        </div>
                         </ul>
                     </div>
                     <div class="tab-pane" id="activ">
@@ -131,7 +133,7 @@
                                 {% csrf_token %}
                                 {{ task_form.title }}
                                 {{ task_form.content }}
-                                <input style="background-color: #CBC3E3;!important;" class="col-2 btn btn-light me-4"
+                                <input style="background-color: #CBC3E3;!important;" class="col-2 btn btn-light me-4 mt-auto"
                                        type="submit" value="Submit">
                             </div>
                         </form>

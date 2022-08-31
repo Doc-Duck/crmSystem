@@ -8,13 +8,32 @@
                     <h2 class="text-center">Add the product</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    <form action="{% url 'products_add' %}" method="post">
                         {% csrf_token %}
                         {{ form }}
                         <input class="btn btn-light mt-3" style="background-color: #CBC3E3;!important;" type="submit">
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="col">
+            <table class="table ms-2">
+                <thread>
+                    <th scope="col">Total sales</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Department</th>
+                </thread>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <th>{{ product.sum }}</th>
+                        <td>{{ product.products__name }}</td>
+                        <td>{{ product.products__price }}</td>
+                        <td>{{ product.products__department__name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
         </div>
     </div>
 {% endblock %}

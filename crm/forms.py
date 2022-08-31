@@ -72,3 +72,13 @@ class ProductSale(forms.ModelForm):
             'products': Select(attrs={'type': "text", 'class': "form-select pr-form", 'placeholder': "Products"}),
             'quantity': TextInput(attrs={'type': "number", 'class': "form-control mb-2", 'placeholder': "Quantity"}),
         }
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Departments
+        fields = '__all__'
+        widgets = {
+            'name': TextInput(attrs={'type': "text", 'class': "form-control", 'placeholder': "Department name"}),
+            'location': TextInput(attrs={'type': "text", 'class': "form-control", 'placeholder': "Location"}),
+        }

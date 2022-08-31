@@ -103,7 +103,7 @@ def settings(request):
                                                                                address=address, email=email,
                                                                                department=department)
             info = Managers.objects.select_related('department').get(username=user)
-    return render(request, 'crm/settings.html', context={'info': info, 'form': form})
+    return render(request, 'crm/settings.html', context=context)
 
 
 def sales(request):
@@ -172,3 +172,45 @@ def add_deal(request):
                                          sales_id=product_id)
             product_sale.save()
     return redirect('sales')
+
+
+def products(request):
+    form = ProductForm()
+    products = Products_sale.objects.values('products__name', 'products__price',
+                                            "products__department__name").annotate(sum=Sum('quantity')).order_by('-sum')
+    context = {
+        'form': form,
+        'products': products
+    }
+    return render(request, 'crm/products.html', context=context)
+
+
+@require_http_methods(['POST'])
+def prod_add_form(request):
+    form = ProductForm(request.POST)
+    if form.is_valid():
+        product = Products(name=form.cleaned_data['name'], price=form.cleaned_data['price'], department=form.cleaned_data['department'])
+        product.save()
+    return redirect('products')
+
+
+def department_managment(request):
+    form = DepartmentForm()
+    departments = Managers.objects.values('department__name','department__location').annotate(managers=Count('id'))
+    current_dep = Departments.objects.get(pk=Managers.objects.values('department_id').get(username=request.user.username).get('department_id'))
+    print(departments, current_dep)
+    context = {
+        'all_dep': departments,
+        'cur_dep': current_dep,
+        'form': form
+    }
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST)
+        deps = Departments.objects.all().values('name')
+        lst = []
+        for dep in deps:
+            lst.append(dep.get('name'))
+        if form.is_valid():
+            if form.cleaned_data['name'] not in lst:
+                Departments(name=form.cleaned_data['name'], location=form.cleaned_data['location']).save()
+    return render(request, 'crm/departments_managment.html', context=context)
